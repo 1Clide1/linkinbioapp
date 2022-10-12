@@ -9,8 +9,9 @@
 /coverage
 
 # database
-/prisma/db.sqlite
-/prisma/db.sqlite-journal
+# this should be the default paths
+./schema.prisma
+./prisma/schema.prisma
 
 # next.js
 /.next/
