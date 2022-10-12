@@ -1,19 +1,11 @@
-
 generator client {
     provider = "prisma-client-js"
 }
 
+// I'm going to be using standard mysql for the database
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading: 
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    provider = "mysql"
     url      = env("DATABASE_URL")
-}
-
-model Example {
-    id String @id @default(cuid())
 }
 
 // Necessary for Next auth
@@ -44,13 +36,29 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+    id              String         @id @default(cuid())
+    // I want the usernames to be unique and do not want users to have the same name
+    name            String         @unique
+    email           String         @unique
+    emailVerified   DateTime?
+    password        String
+    profileImage    String
+    backgroundImage String
+    biography       String?
+    creatorLinks    CreatorLinks[]
+    // I want there to be a premium version of my app so I need to be able to track that and I am only going to have one tier
+    isPremium       Boolean
+    createdAt       DateTime
+    accounts        Account[]
+    sessions        Session[]
+}
+
+// I want users to have unlimited links so it needs to be a list of list preferably
+model CreatorLinks {
+    id     String @id @default(cuid())
+    link   String
+    userId String
+    User   User   @relation(fields: [userId], references: [id])
 }
 
 model VerificationToken {
