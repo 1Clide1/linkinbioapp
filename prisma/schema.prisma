@@ -37,14 +37,15 @@ model Session {
 
 model User {
     id              String         @id @default(cuid())
-    // I want the usernames to be unique and do not want users to have the same name
-    name            String         @unique
+    // I want the usernames to be unique and username is more of a stage name
+    username        String         @unique
     email           String         @unique
     emailVerified   DateTime?
-    password        String
+    // this is optional if they want to include their actual name
+    name            String?
+    biography       String?
     profileImage    String
     backgroundImage String
-    biography       String?
     creatorLinks    CreatorLinks[]
     // I want there to be a premium version of my app so I need to be able to track that and I am only going to have one tier
     isPremium       Boolean
